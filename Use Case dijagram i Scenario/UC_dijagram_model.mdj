@@ -2039,7 +2039,7 @@
 											"top": 932,
 											"width": 260.8505859375,
 											"height": 13,
-											"text": "Sign up ukoliko se radi o gostu",
+											"text": "Sign up - gosti",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2056,7 +2056,7 @@
 											"top": 947,
 											"width": 260.8505859375,
 											"height": 13,
-											"text": "Log in ukoliko se radi o prijavljenom korisniku",
+											"text": "Log in - prijavljeni",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4082,7 +4082,7 @@
 											"top": 1026,
 											"width": 270.2578125,
 											"height": 13,
-											"text": "Download omogućen samo prijavljenima",
+											"text": "Download - samo prijavljeni",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4099,7 +4099,7 @@
 											"top": 1041,
 											"width": 270.2578125,
 											"height": 13,
-											"text": "Ocjenjivanje omogućeno samo kompetentnima",
+											"text": "ocjenjivanje - samo kompetentni",
 											"horizontalAlignment": 0
 										}
 									],
@@ -5862,7 +5862,7 @@
 											"top": 631,
 											"width": 274.59326171875,
 											"height": 13,
-											"text": "Naučni rad mora biti objavljen da bi bio ažuriran",
+											"text": "Naučni rad objavljen",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5879,7 +5879,7 @@
 											"top": 646,
 											"width": 274.59326171875,
 											"height": 13,
-											"text": "Dobivena prijava od moderatora sistema",
+											"text": "Dobivena prijava od moderatora",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7154,7 +7154,7 @@
 											"top": 686,
 											"width": 314.31689453125,
 											"height": 13,
-											"text": "Moderator pronašao grešku u osnovnim informacijama",
+											"text": "Moderator pronašao grešku",
 											"horizontalAlignment": 0
 										}
 									],
@@ -10337,7 +10337,7 @@
 											"top": 806,
 											"width": 279,
 											"height": 13,
-											"text": "Ukoliko je račun zloupotrebljen briše ga",
+											"text": "Ukoliko je zloupotrebljen",
 											"horizontalAlignment": 0
 										}
 									],
@@ -11573,7 +11573,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/yENdtV+Bnz0="
 							},
-							"name": "Sign up ukoliko se radi o gostu"
+							"name": "Sign up - gosti"
 						},
 						{
 							"_type": "UMLExtensionPoint",
@@ -11581,7 +11581,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/yENdtV+Bnz0="
 							},
-							"name": "Log in ukoliko se radi o prijavljenom korisniku"
+							"name": "Log in - prijavljeni"
 						}
 					]
 				},
@@ -11734,7 +11734,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/yFQ3enYLDVM="
 							},
-							"name": "Download omogućen samo prijavljenima"
+							"name": "Download - samo prijavljeni"
 						},
 						{
 							"_type": "UMLExtensionPoint",
@@ -11742,7 +11742,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/yFQ3enYLDVM="
 							},
-							"name": "Ocjenjivanje omogućeno samo kompetentnima"
+							"name": "ocjenjivanje - samo kompetentni"
 						}
 					]
 				},
@@ -11852,7 +11852,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/yGkFTIyNa5Q="
 							},
-							"name": "Naučni rad mora biti objavljen da bi bio ažuriran"
+							"name": "Naučni rad objavljen"
 						},
 						{
 							"_type": "UMLExtensionPoint",
@@ -11860,7 +11860,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/yGkFTIyNa5Q="
 							},
-							"name": "Dobivena prijava od moderatora sistema"
+							"name": "Dobivena prijava od moderatora"
 						},
 						{
 							"_type": "UMLExtensionPoint",
@@ -11946,7 +11946,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/yHT+Za8L+5c="
 							},
-							"name": "Moderator pronašao grešku u osnovnim informacijama"
+							"name": "Moderator pronašao grešku"
 						}
 					]
 				},
@@ -12124,7 +12124,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF/yImngCdX6VQ="
 							},
-							"name": "Ukoliko je račun zloupotrebljen briše ga"
+							"name": "Ukoliko je zloupotrebljen"
 						}
 					]
 				}
