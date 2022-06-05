@@ -1192,8 +1192,8 @@
 							"left": 536,
 							"top": 616,
 							"width": 100,
-							"height": 68,
-							"text": "- User details  \n- Add user      \n- Login "
+							"height": 83,
+							"text": "- User details  \n- Add user      \n- Login\n- Hang out"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -1209,7 +1209,7 @@
 								"$ref": "AAAAAAGBNT8zOfgYlFY="
 							},
 							"lineStyle": 1,
-							"points": "591:600;589:615"
+							"points": "592:600;590:615"
 						},
 						{
 							"_type": "UMLNoteView",
