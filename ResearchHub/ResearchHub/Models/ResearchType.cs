@@ -1,7 +1,11 @@
-﻿namespace ResearchHub.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ResearchHub.Models
 {
     public enum ResearchType
     {
-        Doctorate, Masters, Journal
+        [Display(Name = "Doctorate")] Doctorate,
+        [Display(Name = "Masters")] Masters,
+        [Display(Name = "Journal")] Journal
     }
 }
