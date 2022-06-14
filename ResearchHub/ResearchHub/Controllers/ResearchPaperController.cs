@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -94,6 +95,7 @@ namespace ResearchHub.Controllers
 
 
         // GET: ResearchPaper/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -219,6 +221,7 @@ namespace ResearchHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("ID,title,rating,paperAbstract,hasPdf,pdfFileUrl, pdfFile")] ResearchPaper researchPaper, string[] types, string[] topics)
         {   
             if (ModelState.IsValid)
@@ -277,6 +280,7 @@ namespace ResearchHub.Controllers
         }
 
         // GET: ResearchPaper/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -297,6 +301,7 @@ namespace ResearchHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize] //Also you can edit only your research papers
         public async Task<IActionResult> Edit(int id, [Bind("ID,title,rating,paperAbstract,hasPdf,pdfFileUrl")] ResearchPaper researchPaper)
         {
             if (id != researchPaper.ID)
@@ -328,6 +333,7 @@ namespace ResearchHub.Controllers
         }
 
         // GET: ResearchPaper/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -348,6 +354,7 @@ namespace ResearchHub.Controllers
         // POST: ResearchPaper/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             //deleting research paper from ResearchPaper
