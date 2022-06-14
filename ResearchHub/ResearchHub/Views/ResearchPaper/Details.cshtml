@@ -30,16 +30,19 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Item1.paperAbstract)
         </dd>
-        <dt class = "col-sm-2">
-            Download options
-        </dt>
-        <dd class = "col-sm-10">
-            @if (Model.Item1.hasPdf) { // još vršiti neke provjere, ovisno od tipa studenta
-                    <a href="@("file///:"+Model.Item1.pdfFileUrl)" class="btn btn-primary" download>Download</a>   
-                } else {
-                    <p>PDF not provided</p>
-            }            
-        </dd>
+        @if (User.Identity.IsAuthenticated) {
+            <dt class = "col-sm-2">
+                Download options
+            </dt>
+            <dd class = "col-sm-10">
+            
+                    @if (Model.Item1.hasPdf) { // još vršiti neke provjere, ovisno od tipa studenta
+                            <a href="@("file///:"+Model.Item1.pdfFileUrl)" class="btn btn-primary" download>Download</a>   
+                        } else {
+                            <p>PDF not provided</p>
+                    }            
+            </dd>
+        }
         <dt class = "col-sm-2">
             Research types of paper
         </dt>
@@ -59,6 +62,10 @@
         <dd class = "col-sm-10">
             Implement in future
         </dd>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            
         <dt class = "col-sm-2">
             Rate this paper
         </dt>
@@ -71,6 +78,7 @@
             </form>
             
         </dd>
+        }
     </dl>
 </div>
 <div>

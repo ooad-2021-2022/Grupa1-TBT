@@ -7,7 +7,7 @@ namespace ResearchHub.Models
         public UserSkills() { }
         [Key]
         public int id { get; set; }
-        [ForeignKey("AspNetUsers")]
+        [ForeignKey("User")]
         public int userID { get; set; }
         [EnumDataType(typeof(ResearchTopic))]
         public int skill { get; set; }

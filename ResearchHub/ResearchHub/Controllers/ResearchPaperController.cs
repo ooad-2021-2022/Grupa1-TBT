@@ -357,6 +357,7 @@ namespace ResearchHub.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            
             //deleting research paper from ResearchPaper
             var researchPaper = await _context.ResearchPaper.FindAsync(id);
             _context.ResearchPaper.Remove(researchPaper);

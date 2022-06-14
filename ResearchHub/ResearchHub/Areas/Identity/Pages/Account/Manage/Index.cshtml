@@ -1,0 +1,68 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile - tell us something more about yourself!";
+    ViewData["ActivePage"] = ManageNavPages.Index; 
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div>
+    Basic information: <br />
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TableUser.firstName"></label>
+                <input asp-for="TableUser.firstName" class="form-control" />
+                <span asp-validation-for="TableUser.firstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TableUser.lastName"></label>
+                <input asp-for="TableUser.lastName" class="form-control" />
+                <span asp-validation-for="TableUser.lastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TableUser.dateOfBirth"></label>
+                <input asp-for="TableUser.dateOfBirth" class="form-control" />
+                <span asp-validation-for="TableUser.dateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TableUser.address"></label>
+                <input asp-for="TableUser.address" class="form-control" />
+                <span asp-validation-for="TableUser.address" class="text-danger"></span>
+            </div>
+            <h4>Select your fields of expertise</h4>
+            @foreach (var topic in Enum.GetValues(typeof(ResearchHub.Models.ResearchTopic))) {
+                <div class="form-group">
+                    <label>@(ResearchHub.Controllers.ResearchPaperController.GetTopicName((ResearchHub.Models.ResearchTopic)topic)) </label>
+                    @if(Model.AlreadyUsedTopics.Contains((int)topic))
+                    {
+                        <input type="checkbox" name="fields" value="@((int)topic)" class="form-control" checked/>
+                    } else
+                    {
+                        <input type="checkbox" name="fields" value="@((int)topic)" class="form-control"/>
+                    }
+
+                </div>
+            }
+            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
