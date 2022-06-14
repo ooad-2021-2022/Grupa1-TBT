@@ -1,0 +1,54 @@
+﻿@model ResearchHub.Models.ResearchPaper
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>ResearchPaper</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="title" class="control-label"></label>
+                <input asp-for="title" class="form-control" />
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="rating" class="control-label"></label>
+                <input asp-for="rating" class="form-control" />
+                <span asp-validation-for="rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="paperAbstract" class="control-label"></label>
+                <input asp-for="paperAbstract" class="form-control" />
+                <span asp-validation-for="paperAbstract" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="hasPdf" /> @Html.DisplayNameFor(model => model.hasPdf)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="pdfFileUrl" class="control-label"></label>
+                <input asp-for="pdfFileUrl" class="form-control" />
+                <span asp-validation-for="pdfFileUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
