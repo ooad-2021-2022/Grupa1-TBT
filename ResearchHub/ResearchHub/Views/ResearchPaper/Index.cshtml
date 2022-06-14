@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ResearchHub.Models.ResearchPaper>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div style="justify-content: center"><h1>Research paper - Seek knowledge, forget about points!</h1></div>
+<br />
+
+<p>
+    <a asp-action="Create">Create New</a>
+    
+</p>
+ <form class="row" style="justify-content:center" asp-action="Search" enctype="form-data">
+    <div class="form-group col-10" style="justify-content:center">
+        <input name="query" class="form-control" value="Search"/>
+    </div>
+    <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+</form> <br />
+<h3>If you want detailed search, make sure to fill the form below. 
+    Use " " - blank sign to separate your search words in one input:
+</h3> <br /> <br />
+<div class="row" style="justify-content: center">
+    <div class="col-md-4">
+        <form asp-action="SearchDetailed" enctype="form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Title of research paper</label>
+                <input name="title" class="form-control" />                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Type of research paper</label>
+                <input name="types" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Relevant topics for research paper</label>
+                <input name="topics" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Authors included in making of research paper</label>
+                <input name="authors" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Keywords that can be found in one's abstract paper</label>
+                <input name="keywords" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

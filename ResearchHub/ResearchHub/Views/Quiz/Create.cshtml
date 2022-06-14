@@ -1,0 +1,43 @@
+﻿@model ResearchHub.Models.Quiz
+
+@{
+    ViewData["Title"] = "Quiz creation";
+}
+
+<h1>Create</h1>
+
+<h4>Quiz</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
+            <div class="form-group">
+                <label asp-for="minimumScoreNeeded" class="control-label"></label>
+                <input asp-for="minimumScoreNeeded" class="form-control" />
+                <span asp-validation-for="minimumScoreNeeded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="pointsPerQuestion" class="control-label"></label>
+                <input asp-for="pointsPerQuestion" class="form-control" />
+                <span asp-validation-for="pointsPerQuestion" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="researchPaperID" class="control-label"></label>
+                <input asp-for="researchPaperID" class="form-control" />
+                <span asp-validation-for="researchPaperID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

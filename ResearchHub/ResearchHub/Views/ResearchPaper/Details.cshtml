@@ -1,0 +1,79 @@
+﻿@model Tuple<ResearchHub.Models.ResearchPaper, string, string>
+
+@{
+    //U model će biti još potrebno dodati listu autora koji su radili na projektu,
+    //ali je to onemogućeno dok ne završimo sa pravljenjem prijavljenog User-a.
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div style="justify-content: center">
+    <h4>ResearchPaper</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Item1.title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Item1.title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Item1.rating)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Item1.rating)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Item1.paperAbstract)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Item1.paperAbstract)
+        </dd>
+        <dt class = "col-sm-2">
+            Download options
+        </dt>
+        <dd class = "col-sm-10">
+            @if (Model.Item1.hasPdf) { // još vršiti neke provjere, ovisno od tipa studenta
+                    <a href="@("file///:"+Model.Item1.pdfFileUrl)" class="btn btn-primary" download>Download</a>   
+                } else {
+                    <p>PDF not provided</p>
+            }            
+        </dd>
+        <dt class = "col-sm-2">
+            Research types of paper
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Item2
+        </dd>
+
+        <dt class = "col-sm-2">
+            Relevant topics for this paper
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Item3
+        </dd>
+        <dt class = "col-sm-2">
+            Paper authors
+        </dt>
+        <dd class = "col-sm-10">
+            Implement in future
+        </dd>
+        <dt class = "col-sm-2">
+            Rate this paper
+        </dt>
+        
+        <dd class = "col-sm-10" class="btn btn-primary">
+            <form asp-action="StartQuiz" asp-controller="Quiz">
+                <input name="paperID" hidden value="@Model.Item1.ID"/>
+                <input name="rating" type="number" step="0.1" />
+                <input type="Submit" value="Rate this paper" class="btn btn-primary"/>
+            </form>
+            
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Item1.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
