@@ -16,7 +16,7 @@ namespace ResearchHub.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.13")
+                .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -351,7 +351,9 @@ namespace ResearchHub.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("question")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("quizID")
                         .HasColumnType("int");
@@ -429,14 +431,22 @@ namespace ResearchHub.Migrations
                     b.Property<bool>("hasPdf")
                         .HasColumnType("bit");
 
+                    b.Property<int>("numberOfRatings")
+                        .HasColumnType("int");
+
                     b.Property<string>("paperAbstract")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("pdfFileUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("rating")
                         .HasColumnType("float");
 
                     b.Property<string>("title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ID");
 
