@@ -26,7 +26,7 @@ namespace ResearchHub.Data
         public DbSet<UserSkills> UserSkills { get; set; }
         public DbSet<ResearchTopicsPaper> ResearchTopicsPaper { get; set; }
         public DbSet<PaperType> PaperType { get; set; }
-
+        public DbSet<Requests> Requests { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>().ToTable("User");
@@ -41,6 +41,7 @@ namespace ResearchHub.Data
             builder.Entity<UserSkills>().ToTable("UserSkills");
             builder.Entity<ResearchTopicsPaper>().ToTable("ResearchTopicsPaper");
             builder.Entity<PaperType>().ToTable("PaperType");
+            builder.Entity<Requests>().ToTable("Requests");
             /*builder.Entity<User>().HasRequired(c => c.Stage)
                 .WithMany()
                 .WillCascadeOnDelete(false);

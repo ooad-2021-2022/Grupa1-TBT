@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResearchHub.Data;
 
 namespace ResearchHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220614123147_RequestsAdded")]
+    partial class RequestsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -419,33 +421,6 @@ namespace ResearchHub.Migrations
                     b.HasIndex("receiverID");
 
                     b.ToTable("Ratings");
-                });
-
-            modelBuilder.Entity("ResearchHub.Models.Requests", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("requestBody")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("requesteeID")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("requesterID")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("timeRequestMade")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("ResearchHub.Models.ResearchPaper", b =>
