@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Coffe time!";
+}
+
+<h3>Deleting user</h3>
+<form asp-action="Delete" method="post" enctype="multipart/form-data">
+     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label>Enter username of user that you want to delete:</label>
+                <input name="username" type="email" class ="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Delete" class="btn btn-primary" />
+            </div>
+</form>

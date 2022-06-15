@@ -128,6 +128,10 @@ namespace ResearchHub.Controllers
         public async Task<IActionResult> Search(string? query)
         {
             query ??= "";
+            if (query == "")
+            {
+                return View("Display", new List<Tuple<ResearchPaper, string, bool>>());
+            }
             var acceptedPapers = new List<Tuple<ResearchPaper, string, bool>>();
             
             //Separating words of our search
@@ -169,7 +173,10 @@ namespace ResearchHub.Controllers
                     }
                 }
 
-                var id = UserController.GetNormalUser((await _userManager.GetUserAsync(HttpContext.User)).Id, _context.User.ToList()).id;
+                int id = -1;
+                if (User.Identity.IsAuthenticated) {
+                    id = UserController.GetNormalUser((await _userManager.GetUserAsync(HttpContext.User)).Id, _context.User.ToList()).id;
+                }
 
                 foreach (var word in words)
                 {                 
@@ -177,7 +184,10 @@ namespace ResearchHub.Controllers
                     {
                         var myID = publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().FirstOrDefault().userID;
                         var aspNetID = users.Where(usr => usr.id == myID).ToList().FirstOrDefault().aspNetID;
-                        string name = allUsr.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault().UserName;
+                        var myUser = allUsr.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault();
+                        var name = "";
+                        if (myUser != null)
+                            name = myUser.UserName;
                         bool displayEdit = false;
 
                         if (id == publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().First().userID)
@@ -256,14 +266,20 @@ namespace ResearchHub.Controllers
                     }
                 }
 
-                var id = UserController.GetNormalUser((await _userManager.GetUserAsync(HttpContext.User)).Id, _context.User.ToList()).id;
+                int id = -1;
+                if (User.Identity.IsAuthenticated)
+                    id = UserController.GetNormalUser((await _userManager.GetUserAsync(HttpContext.User)).Id, _context.User.ToList()).id;
 
                 List<string> authorsUsernames = new List<string>();
                 
 
                 foreach (var user in _userManager.Users)
                 {
-                    var normalID = users.Where(usr => usr.aspNetID == user.Id).ToList().FirstOrDefault().id;
+                    var normalUser = users.Where(usr => usr.aspNetID == user.Id).ToList().FirstOrDefault();
+
+                    var normalID = -1;
+                    if (normalUser != null)
+                        normalID = normalUser.id;
                     
                     if ((publishedPapers.Where(pp => pp.paperID == paper.ID && pp.userID == normalID).ToList().Count > 0) || (paperAuthors.Where(pp => pp.paperID == paper.ID && pp.authorID == normalID).ToList().Count > 0))
                         authorsUsernames.Add(user.UserName);
@@ -274,7 +290,10 @@ namespace ResearchHub.Controllers
                 {
                     var myID = publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().FirstOrDefault().userID;
                     var aspNetID = users.Where(usr => usr.id == myID).ToList().FirstOrDefault().aspNetID;
-                    string name = allUsr.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault().UserName;
+                    var myUser = allUsr.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault();
+                    var name = "";
+                    if (myUser != null)
+                        name = myUser.UserName;
                     bool displayEdit = false;
 
                     if (id == publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().First().userID)

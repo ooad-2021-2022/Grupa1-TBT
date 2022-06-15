@@ -34,6 +34,10 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Collaborations" asp-action="Index">Collaborate</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="DailyReport">Daily report</a>
+                                </li>
+                            
                             }
 
 
@@ -46,14 +50,14 @@
                             @if (User.IsInRole("Administrator"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Delete accounts</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="DeleteAccounts">Delete accounts</a>
                                 </li>
                             }
 
                             @if (User.IsInRole("Moderator"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Report problem</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="ReportProblem">Report problem</a>
                                 </li>
                             }
                             
