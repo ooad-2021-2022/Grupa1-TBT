@@ -1,4 +1,4 @@
-﻿@model Tuple<ResearchHub.Models.ResearchPaper, string, string>
+﻿@model Tuple<ResearchHub.Models.ResearchPaper, string, string, string, string>
 
 @{
     //U model će biti još potrebno dodati listu autora koji su radili na projektu,
@@ -60,7 +60,13 @@
             Paper authors
         </dt>
         <dd class = "col-sm-10">
-            Implement in future
+            @Model.Item4
+        </dd>
+        <dt class = "col-sm-2">
+            Date published
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Item5
         </dd>
 
         @if (User.Identity.IsAuthenticated)

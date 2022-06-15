@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,11 +22,13 @@ namespace ResearchHub.Controllers
         private List<ResearchType> researchTypes = new List<ResearchType>();
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ResearchPaperController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ResearchPaperController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _hostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
         // GET: ResearchPaper
@@ -65,6 +68,7 @@ namespace ResearchHub.Controllers
 
             var paperTopics = " ";
             var paperTypes = " ";
+            var authors = " ";
 
             foreach (var topic in allTopics)
             {
@@ -73,6 +77,8 @@ namespace ResearchHub.Controllers
                     paperTopics += ", " + GetTopicName((ResearchTopic)topic.topic);
                 }
             }
+
+
 
             if (paperTopics.Length > 2)
             paperTopics = paperTopics.Substring(2);
@@ -87,8 +93,25 @@ namespace ResearchHub.Controllers
 
             if (paperTypes.Length > 2)
                 paperTypes = paperTypes.Substring(2);
+
+            var pubPaper = _context.PublishedPapers.Where(pp => pp.paperID == researchPaper.ID).ToList().FirstOrDefault();
+            var datePublished = pubPaper.datePublished.ToString();
+            var aspNetID = _context.User.Where(usr => usr.id == pubPaper.userID).ToList().FirstOrDefault().aspNetID;
+
+            authors = _userManager.Users.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault().UserName;
+
+            var userss = _userManager.Users.ToList();
+            var tableUsers = _context.User.ToList();
+
+            var paperAuthorRows = _context.PaperAuthor.Where(pa => pa.paperID == researchPaper.ID).ToList();
+
+            foreach (var row in paperAuthorRows)
+            {
+                aspNetID = tableUsers.Where(usr => usr.id == row.authorID).ToList().FirstOrDefault().aspNetID;
+                authors += ", " + userss.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault().UserName;
+            }
             
-            var tuple = new Tuple<ResearchPaper, string, string>(researchPaper, paperTypes, paperTopics);
+            var tuple = new Tuple<ResearchPaper, string, string, string, string>(researchPaper, paperTypes, paperTopics, authors, datePublished);
 
             return View("Details", tuple);
         }
@@ -104,17 +127,21 @@ namespace ResearchHub.Controllers
         // GET: ResearchPaper/Search/query
         public async Task<IActionResult> Search(string? query)
         {
-            List<ResearchPaper> acceptedPapers = new List<ResearchPaper>();
+            var acceptedPapers = new List<Tuple<ResearchPaper, string>>();
 
             //Separating words of our search
             List<string> words = query.Split(" ").ToList();
 
-            
-            
+
+
             //searching for words in abstract, types, topics, authors, or title:
             //authors - implement this later.
-
+            
+            var users = _context.User.ToList();
             var allPapers = _context.ResearchPaper.ToList();
+            var publishedPapers = _context.PublishedPapers.ToList();
+            var paperAuthors = _context.PaperAuthor.ToList();
+            var allUsr = _userManager.Users.ToList();
 
             foreach (var paper in allPapers)
             {
@@ -145,7 +172,11 @@ namespace ResearchHub.Controllers
                 {                 
                     if ((paper.title != null && paper.title.ToLower().Contains(word.ToLower()) || (paper.paperAbstract != null && paper.paperAbstract.ToLower().Contains(word.ToLower())) || paperTopics.ToLower().Contains(word.ToLower()) || paperTypes.ToLower().Contains(word.ToLower())))
                     {
-                        acceptedPapers.Add(paper);
+                        var myID = publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().FirstOrDefault().userID;
+                        var aspNetID = users.Where(usr => usr.id == myID).ToList().FirstOrDefault().aspNetID;
+                        string name = allUsr.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault().UserName;
+
+                        acceptedPapers.Add(new Tuple<ResearchPaper, string>(paper, name));
                         break;
                     }                        
                 }
@@ -169,7 +200,7 @@ namespace ResearchHub.Controllers
 
         public async Task<IActionResult> SearchDetailed(string? title, string? types, string? topics, string? authors, string? keywords)
         {
-            var acceptedPapers = new List<ResearchPaper>();
+            var acceptedPapers = new List<Tuple<ResearchPaper, string>>();
             var allPapers = _context.ResearchPaper.ToList();
 
             //paper needs to have at least one word in its description 
@@ -180,6 +211,11 @@ namespace ResearchHub.Controllers
             List<string> topicWords = topics == null ? null : topics.ToLower().Split(" ").ToList();
             List<string> authorWords =  authors == null ? null :  authors.ToLower().Split(" ").ToList();
             List<string> keyWords = keywords == null ? null :  keywords.ToLower().Split(" ").ToList();
+
+            var users = _context.User.ToList();
+            var publishedPapers = _context.PublishedPapers.ToList();
+            var paperAuthors = _context.PaperAuthor.ToList();
+            var allUsr = _userManager.Users.ToList();
 
             foreach (var paper in allPapers)
             {
@@ -206,10 +242,25 @@ namespace ResearchHub.Controllers
                     }
                 }
 
-                //needs to be checked for authors also, but that'll be implemented later.
-                if (ContainsAny(paper.title, titleWords) || ContainsAny(paperTypes, typeWords) || ContainsAny(paperTopics, topicWords) || ContainsAny(paper.paperAbstract, keyWords))
+                List<string> authorsUsernames = new List<string>();
+                
+
+                foreach (var user in _userManager.Users)
                 {
-                    acceptedPapers.Add(paper);                    
+                    var normalID = users.Where(usr => usr.aspNetID == user.Id).ToList().FirstOrDefault().id;
+                    
+                    if ((publishedPapers.Where(pp => pp.paperID == paper.ID && pp.userID == normalID).ToList().Count > 0) || (paperAuthors.Where(pp => pp.paperID == paper.ID && pp.authorID == normalID).ToList().Count > 0))
+                        authorsUsernames.Add(user.UserName);
+                }
+
+                
+                if (ContainsAny(paper.title, titleWords) || ContainsAny(paperTypes, typeWords) || ContainsAny(paperTopics, topicWords) || ContainsAny(paper.paperAbstract, keyWords) || ContainsAny(authors, authorsUsernames))
+                {
+                    var myID = publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().FirstOrDefault().userID;
+                    var aspNetID = users.Where(usr => usr.id == myID).ToList().FirstOrDefault().aspNetID;
+                    string name = allUsr.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault().UserName;
+                    
+                    acceptedPapers.Add(new Tuple<ResearchPaper, string>(paper, name));                    
                 }
             }
 
@@ -222,7 +273,7 @@ namespace ResearchHub.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("ID,title,rating,paperAbstract,hasPdf,pdfFileUrl, pdfFile")] ResearchPaper researchPaper, string[] types, string[] topics)
+        public async Task<IActionResult> Create([Bind("ID,title,rating,paperAbstract,hasPdf,pdfFileUrl, pdfFile")] ResearchPaper researchPaper, string[] types, string[] topics, string usernames)
         {   
             if (ModelState.IsValid)
             {
@@ -247,7 +298,10 @@ namespace ResearchHub.Controllers
 
                 //upload row to database
                 researchPaper.rating = 0;
-                _context.Add(researchPaper);                
+                _context.Add(researchPaper);
+
+                //because of foreign key constraint.
+                await _context.SaveChangesAsync();
 
                 //add research topics and types to ResearchTopicsPaper and PaperType
                 foreach(string type in types)
@@ -270,7 +324,30 @@ namespace ResearchHub.Controllers
                     _context.Add(researchTopic);
                 }
 
-                //PaperAuthor, PublishedPapers - next time.
+                //Get current user, so we know who is marked as publisher
+                IdentityUser user = await _userManager.GetUserAsync(HttpContext.User);
+
+                //Get all users, to be able to find authors of this paper
+                var allUsers = _userManager.Users.ToList();
+
+
+                foreach (var user1 in allUsers)
+                {
+                    if (usernames.ToLower().Contains(user1.UserName.ToLower()))
+                    {
+                        PaperAuthor paperAuthor = new PaperAuthor();
+                        paperAuthor.authorID = _context.User.Where(us => us.aspNetID == user1.Id).ToList().First().id;
+                        paperAuthor.paperID = researchPaper.ID;
+                        _context.Add(paperAuthor);
+                    }
+                }
+
+                PublishedPapers publishedPaper = new PublishedPapers();
+                publishedPaper.userID = _context.User.Where(us => us.aspNetID == user.Id).ToList().First().id;
+                publishedPaper.paperID = researchPaper.ID;
+                publishedPaper.datePublished = DateTime.Now;
+
+                _context.Add(publishedPaper);
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Create", "Quiz",new { id=researchPaper.ID });

@@ -1,0 +1,36 @@
+﻿@model ResearchHub.Models.Collaborations
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Collaborations</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.timeRequestMade)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.timeRequestMade)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.collaborator)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.collaborator.id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.collaboratee)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.collaboratee.id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,50 +1,48 @@
-﻿@model IEnumerable<ResearchHub.Models.ResearchPaper>
-
+﻿@model List<Tuple<ResearchPaper, string>>
 @{
     ViewData["Title"] = "Display";
 }
 
-<h1>Display</h1>
+<h1>Returned research papers are:</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.rating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.hasPdf)
-            </th>
-            <th>Author of paper</th>
-            <th>Additional</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.hasPdf)
-            </td>
-            <td>
-                Author - kasnije implementirati
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> 
-            </td>
-        </tr>
+@if(Model.Count > 0) {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].Item1.title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].Item1.rating)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].Item1.hasPdf)
+                    </th>
+                    <th>Author of paper (username)</th>
+                    <th>Additional</th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.rating)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Item1.hasPdf)
+                    </td>
+                    <td>
+                        @item.Item2
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Item1.ID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Item1.ID">Details</a> 
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
 }
-    </tbody>
-</table>

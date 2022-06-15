@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,12 @@ namespace ResearchHub.Controllers
     public class QuizController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public QuizController(ApplicationDbContext context)
+        public QuizController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Quiz
@@ -109,6 +112,62 @@ namespace ResearchHub.Controllers
                 _context.Update(researchPaper);
                 await _context.SaveChangesAsync();
 
+                //now checking ratings of receiver, maybe promote it to VIP User:
+
+                var aspID = (await _userManager.GetUserAsync(HttpContext.User)).Id;
+                int giverID = _context.User.Where(usr => usr.aspNetID == aspID).ToList().FirstOrDefault().id;
+
+                int receiverID = _context.PublishedPapers.Where(pp => pp.paperID == researchPaper.ID).ToList().FirstOrDefault().userID;
+
+                var pprs = _context.PublishedPapers.Where(pp => pp.userID == receiverID).ToList();
+                var researchPapers = _context.ResearchPaper.ToList();
+                var averageRating = 0.0;
+
+                foreach(var p in pprs)
+                {
+                    var paper = researchPapers.Where(rp => rp.ID == p.paperID).ToList().FirstOrDefault();                   
+                    averageRating += paper.rating; 
+                }
+
+                averageRating /= pprs.Count;
+
+                Ratings ratingg = new Ratings();
+                ratingg.giverID = giverID;
+                ratingg.receiverID = receiverID;
+                ratingg.paperID = paperID;
+                ratingg.rating = rating;
+
+                _context.Add(ratingg);
+
+                //find exact user that is receiver, based on his ID:
+                string aspNetID = _context.User.Where(usr => usr.id == receiverID).ToList().FirstOrDefault().aspNetID;
+
+                var user = _userManager.Users.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault();
+
+                if (averageRating >= 9.0)
+                {
+                    if (await _userManager.IsInRoleAsync(user, "Registered user"))
+                        await _userManager.RemoveFromRoleAsync(user, "Registered user");
+                    if (!await _userManager.IsInRoleAsync(user, "VIP User"))
+                    {
+                        await _userManager.AddToRoleAsync(user, "VIP User");
+                        User usr = _context.User.Where(_usr => _usr.id == receiverID).ToList().FirstOrDefault();
+                        //change lattitude and longitude - next time
+                    }
+                } else
+                {
+                    if (await _userManager.IsInRoleAsync(user, "VIP User"))
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, "VIP User");
+                        User usr = _context.User.Where(_usr => _usr.id == receiverID).ToList().FirstOrDefault();
+                        //change lattitude and longitude - next time                        
+                    }
+                    if (!await _userManager.IsInRoleAsync(user, "Registered user"))
+                        await _userManager.AddToRoleAsync(user, "Registered user");
+                }
+
+                await _context.SaveChangesAsync();
+                
                 return RedirectToAction("Index", "ResearchPaper");
            } else
            {

@@ -23,24 +23,40 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Create">New paper</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Go to coffee</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Delete accounts</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Report problem</a>
-                            </li>
-                            <l class="nav-item">
-                                 <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
-                            </l>   
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Collaborate</a>
-                        </li>
+                            @if (User.IsInRole("Registered user") || User.IsInRole("VIP User"))
+                            {
+                                <l class="nav-item">
+                                    <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
+                                </l>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Create">New paper</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Collaborate</a>
+                                </li>
+                            }
+
+
+                            @if (User.IsInRole("VIP User"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Go to coffee</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Delete accounts</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Moderator"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Report problem</a>
+                                </li>
+                            }
+                            
                         }
                         
                         

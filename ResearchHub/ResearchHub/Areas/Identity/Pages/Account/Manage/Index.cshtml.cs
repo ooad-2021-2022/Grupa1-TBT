@@ -82,7 +82,7 @@ namespace ResearchHub.Areas.Identity.Pages.Account.Manage
             //loading additional user info based on returned current user
             var firstUser = FindUser(user);
             TableUser = new DummyUser();
-
+            
             if (firstUser != null)
             {
                 validLoading = true;
@@ -104,10 +104,6 @@ namespace ResearchHub.Areas.Identity.Pages.Account.Manage
             {
                 AlreadyUsedTopics.Add(skill.skill);
             }
-
-            //all current skills will be overwritten with new results, so we need to delete 'em
-            _context.UserSkills.RemoveRange(userSkillsList);
-            await _context.SaveChangesAsync();
 
             Username = userName; //basically email.
 
@@ -151,9 +147,19 @@ namespace ResearchHub.Areas.Identity.Pages.Account.Manage
         }
 
         public async Task<IActionResult> OnPostAsync(string[] fields)
-        {            
+        {
+
             var user = await _userManager.GetUserAsync(User);
             var firstUser = FindUser(user);
+
+            //we need to retrieve all userskills from UserSkills table:
+            var userSkillsList = _context.UserSkills.Where(skill => skill.userID == firstUser.id).ToList();
+            if (userSkillsList == null)
+                userSkillsList = new List<UserSkills>();
+
+            //all current skills will be overwritten with new results, so we need to delete 'em
+            _context.UserSkills.RemoveRange(userSkillsList);
+            await _context.SaveChangesAsync();
 
             //memorizing all changes that happened before posting data
             firstUser.firstName = TableUser.firstName;
@@ -191,7 +197,7 @@ namespace ResearchHub.Areas.Identity.Pages.Account.Manage
                 var newSkill = new UserSkills();
                 newSkill.userID = firstUser.id;
                 newSkill.skill = skill;
-                _context.UserSkills.Add(newSkill);
+                _context.Add(newSkill);
             }
 
             

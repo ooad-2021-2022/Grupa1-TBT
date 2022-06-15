@@ -106,6 +106,10 @@ namespace ResearchHub.Areas.Identity.Pages.Account
                     tableUser.longitude = 0;
                     tableUser.lattitude = 0;
                     tableUser.dateOfBirth = DateTime.Now;
+
+                    //add specific role to created user
+                    await _userManager.AddToRoleAsync(user, "Registered user");
+
                     _context.User.Add(tableUser);
 
                     await _context.SaveChangesAsync();
