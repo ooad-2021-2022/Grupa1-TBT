@@ -130,6 +130,8 @@ namespace ResearchHub.Controllers
             query ??= "";
             var acceptedPapers = new List<Tuple<ResearchPaper, string>>();
 
+            if(query == null) return View("Display", acceptedPapers);
+
             //Separating words of our search
             List<string> words = query.Split(" ").ToList();
 
