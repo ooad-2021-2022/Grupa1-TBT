@@ -1,4 +1,4 @@
-﻿@model List<Tuple<ResearchPaper, string>>
+﻿@model List<Tuple<ResearchPaper, string, bool>>
 @{
     ViewData["Title"] = "Display";
 }
@@ -40,8 +40,12 @@
                         @item.Item2
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Item1.ID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Item1.ID">Details</a> 
+                        
+                        @if (item.Item3) {
+                            <a asp-action="Edit" asp-route-id="@item.Item1.ID">Edit |</a>
+                    
+                            } 
+                        <a asp-action="Details" asp-route-id="@item.Item1.ID"> Details</a> 
                     </td>
                 </tr>
         }

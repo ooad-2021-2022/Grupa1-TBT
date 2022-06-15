@@ -1,47 +1,20 @@
-﻿@model IEnumerable<ResearchHub.Models.Collaborations>
+﻿@model ResearchHub.Controllers.CollaborationsController.DummyInput
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.timeRequestMade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.collaborator)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.collaboratee)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.timeRequestMade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.collaborator.id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.collaboratee.id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<h3 class="alert-success">@Model.username</h3>
+<h3>Enter desired workmate for collaboration:</h3>
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="username" class="control-label"></label>
+                <input name="myUsername" type="email" class ="form-control" />
+                <span asp-validation-for="username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+</form>

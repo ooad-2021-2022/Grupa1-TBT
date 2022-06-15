@@ -22,7 +22,17 @@ namespace ResearchHub.Controllers
             _userManager = userManager;
         }
 
-        //Here we also need function for converting between aspNetID and regular ID
+        //getting different kinds of users based on keys from other tables:
+        public static User GetNormalUser(string aspNetID, List<User> regularUsers)
+        {
+            return regularUsers.Where(user => user.aspNetID == aspNetID).ToList().FirstOrDefault();
+        }
+
+        public static IdentityUser GetAspNetUser(int regularID, List<User> regularUsers, List<IdentityUser> aspNetUsers)
+        {
+            string aspNetID = regularUsers.Where(usr => usr.id == regularID).ToList().FirstOrDefault().aspNetID;
+            return aspNetUsers.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault();
+        } 
 
         //public static string GetLocationProperty()
         //{
