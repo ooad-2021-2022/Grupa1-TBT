@@ -125,7 +125,7 @@ namespace ResearchHub.Controllers
                 MailMessage message = new MailMessage();
                 SmtpClient smtp = new SmtpClient();
                 message.From = new MailAddress("researchub6969@gmail.com");
-                message.To.Add(new MailAddress("apetrovic1@etf.unsa.ba"));
+                message.To.Add(new MailAddress(receiverMail));
                 message.Subject = "Daily report";
                 message.IsBodyHtml = true; //to make message body as html  
                 message.Body = htmlMessage;
@@ -134,7 +134,7 @@ namespace ResearchHub.Controllers
                 smtp.EnableSsl = true;
                 
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("researchub6969@gmail.com", "researchub123");
+                smtp.Credentials = new NetworkCredential("researchub6969@gmail.com", "xmgfbpoppfvoutxf");
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 await smtp.SendMailAsync(message);
             }
