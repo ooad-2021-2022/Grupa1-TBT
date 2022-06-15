@@ -49,26 +49,9 @@ namespace ResearchHub.Controllers
         // GET: User
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.ToListAsync());
+            return View();
         }
 
-        // GET: User/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
 
         // GET: User/Create
         public IActionResult Create()
@@ -76,20 +59,38 @@ namespace ResearchHub.Controllers
             return View();
         }
 
-        // POST: User/Create
+        // POST: User/Find
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,aspNetID,firstName,lastName,address,dateOfBirth,numberOfDownloads,lattitude,longitude")] User user)
+        public async Task<IActionResult> Find(string? username)
         {
-            if (ModelState.IsValid)
+            //find requestee id - the one who we want to go out with
+            var selectedUsers = _userManager.Users.ToList().Where(usr => usr.UserName == username).ToList();
+            User requestee = null;
+
+            if (selectedUsers.Count == 0)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ErrorViewModel model = new ErrorViewModel();
+                model.RequestId = "Searched colleague username does not exist";
+                return View("Error", model);
             }
-            return View(user);
+            else
+            {
+                requestee = GetNormalUser(selectedUsers.First().Id, _context.User.ToList());
+                var aspRequestee = GetAspNetUser(requestee.id, _context.User.ToList(), _userManager.Users.ToList());
+
+                if (! await _userManager.IsInRoleAsync(aspRequestee, "VIP User"))
+                {
+                    ErrorViewModel error = new ErrorViewModel();
+                    error.RequestId = "User you are trying to get is not VIP, which implies that he doesn't have privileges for this feature.";
+                    return View("Error", error);
+                }
+            }
+
+
+            return View("Display", requestee);
         }
 
         // GET: User/Edit/5
@@ -108,39 +109,28 @@ namespace ResearchHub.Controllers
             return View(user);
         }
 
-        // POST: User/Edit/5
+        // POST: User/CoffeeTime/id
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,aspNetID,firstName,lastName,address,dateOfBirth,numberOfDownloads,lattitude,longitude")] User user)
+        public async Task<IActionResult> CoffeeTime(int id, string message)
         {
-            if (id != user.id)
-            {
-                return NotFound();
-            }
+            //get current user normal ID
+            var currentAspUser = await _userManager.GetUserAsync(HttpContext.User);
+            User requester = GetNormalUser(currentAspUser.Id, _context.User.ToList());
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
+            Requests request = new Requests();
+
+            request.requestBody = message;
+            request.requesteeID = id;
+            request.requesterID = requester.id;
+            request.timeRequestMade = DateTime.Now;
+
+            _context.Add(request);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "ResearchPaper");
         }
 
         // GET: User/Delete/5

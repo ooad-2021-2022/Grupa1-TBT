@@ -1,0 +1,70 @@
+﻿@model ResearchHub.Models.User
+
+
+<div style="margin-top: 2%; margin-bottom: 2% ">
+ <div id="myMap"
+style="position:relative;width:1280px;height:400px;"></div>
+</div>
+
+<script type='text/javascript'
+src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap' async
+defer></script>
+ 
+<script type='text/javascript'>
+     function GetMap()
+     {
+         var map = new Microsoft.Maps.Map('#myMap', {
+             credentials: 'AvEdMXLP9ZcDVOWzJ7UyaNSRWWQfsHfDlJIKJz0qT9--QnLjDGvAIgVrHbAe1L_b',
+             center: new Microsoft.Maps.Location(@Model.lattitude, @Model.longitude),
+             mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+             zoom: 10
+             });
+
+             infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
+                visible: false
+             });
+
+             infobox.setMap(map);
+
+             var etf = new Microsoft.Maps.Location(@Model.lattitude, @Model.longitude);
+             var pin = new Microsoft.Maps.Pushpin(etf);
+
+             pin.metadata = {
+                 title: "@Model.firstName" + " @Model.lastName",
+                 description: "@Model.address"
+             };
+
+             Microsoft.Maps.Events.addHandler(pin, 'click', pushpinClicked);
+             map.entities.push(pin);
+ 
+             function pushpinClicked(e) {
+                if (e.target.metadata) {
+                    infobox.setOptions({
+                        location: e.target.getLocation(),
+                        title: e.target.metadata.title,
+                        description: e.target.metadata.description,
+                        visible: true
+                    });
+                }
+            }
+     } 
+
+     
+</script>
+
+<h3>Do you want to go to coffe with this colleague?</h3>
+<form asp-action="CoffeeTime" method="post" enctype="multipart/form-data">
+     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label></label>
+                <input name="id" type="number" class ="form-control" value="@Model.id"/>
+            </div>
+            <div class="form-group">
+                <label>Enter your message for him:</label>
+                <input name="message" type="text" class ="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Yes" class="btn btn-primary" />
+            </div>
+</form>
+
