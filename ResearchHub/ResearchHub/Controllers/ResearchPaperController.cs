@@ -127,6 +127,7 @@ namespace ResearchHub.Controllers
         // GET: ResearchPaper/Search/query
         public async Task<IActionResult> Search(string? query)
         {
+            query ??= "";
             var acceptedPapers = new List<Tuple<ResearchPaper, string>>();
 
             //Separating words of our search
@@ -200,6 +201,13 @@ namespace ResearchHub.Controllers
 
         public async Task<IActionResult> SearchDetailed(string? title, string? types, string? topics, string? authors, string? keywords)
         {
+            /*
+            title ??= "";
+            types ??= "";
+            topics ??= "";
+            authors ??= "";
+            keywords ??= "";
+            */
             var acceptedPapers = new List<Tuple<ResearchPaper, string>>();
             var allPapers = _context.ResearchPaper.ToList();
 
