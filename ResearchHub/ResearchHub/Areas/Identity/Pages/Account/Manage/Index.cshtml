@@ -44,6 +44,16 @@
                 <input asp-for="TableUser.address" class="form-control" />
                 <span asp-validation-for="TableUser.address" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="TableUser.lattitude"></label>
+                <input asp-for="TableUser.lattitude" class="form-control" />
+                <span asp-validation-for="TableUser.lattitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TableUser.longitude"></label>
+                <input asp-for="TableUser.longitude" class="form-control" />
+                <span asp-validation-for="TableUser.longitude" class="text-danger"></span>
+            </div>
             <h4>Select your fields of expertise</h4>
             @foreach (var topic in Enum.GetValues(typeof(ResearchHub.Models.ResearchTopic))) {
                 <div class="form-group">

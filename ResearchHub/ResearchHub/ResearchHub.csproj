@@ -30,4 +30,10 @@
     <Folder Include="wwwroot\Papers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Device">
+      <HintPath>..\..\..\..\tutorijali\AgencijaStan\System.Device.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -51,6 +51,12 @@ namespace ResearchHub.Areas.Identity.Pages.Account.Manage
             [DataType(DataType.Date)]
             [Display(Name = "Date of birth")]
             public DateTime dateOfBirth { get; set; }
+
+            [Display(Name ="Enter your lattitude:")]
+            public double lattitude { get; set; }
+
+            [Display(Name ="Enter your longitude:")]
+            public double longitude { get; set; }
         }
 
         public string Username { get; set; }
@@ -90,6 +96,8 @@ namespace ResearchHub.Areas.Identity.Pages.Account.Manage
                 TableUser.lastName = firstUser.lastName;
                 TableUser.address = firstUser.address;
                 TableUser.dateOfBirth = firstUser.dateOfBirth;
+                TableUser.lattitude = firstUser.lattitude;
+                TableUser.longitude = firstUser.longitude;
             } else
             {
                 return;
@@ -166,6 +174,8 @@ namespace ResearchHub.Areas.Identity.Pages.Account.Manage
             firstUser.lastName = TableUser.lastName;
             firstUser.address = TableUser.address;
             firstUser.dateOfBirth = TableUser.dateOfBirth;
+            firstUser.lattitude = TableUser.lattitude;
+            firstUser.longitude = TableUser.longitude;
             
             if (user == null)
             {

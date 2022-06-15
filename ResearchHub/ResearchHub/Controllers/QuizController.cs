@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -150,17 +151,13 @@ namespace ResearchHub.Controllers
                         await _userManager.RemoveFromRoleAsync(user, "Registered user");
                     if (!await _userManager.IsInRoleAsync(user, "VIP User"))
                     {
-                        await _userManager.AddToRoleAsync(user, "VIP User");
-                        User usr = _context.User.Where(_usr => _usr.id == receiverID).ToList().FirstOrDefault();
-                        //change lattitude and longitude - next time
+                        await _userManager.AddToRoleAsync(user, "VIP User");                       
                     }
                 } else
                 {
                     if (await _userManager.IsInRoleAsync(user, "VIP User"))
                     {
                         await _userManager.RemoveFromRoleAsync(user, "VIP User");
-                        User usr = _context.User.Where(_usr => _usr.id == receiverID).ToList().FirstOrDefault();
-                        //change lattitude and longitude - next time                        
                     }
                     if (!await _userManager.IsInRoleAsync(user, "Registered user"))
                         await _userManager.AddToRoleAsync(user, "Registered user");
