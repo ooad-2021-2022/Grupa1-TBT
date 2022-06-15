@@ -127,9 +127,8 @@ namespace ResearchHub.Controllers
         // GET: ResearchPaper/Search/query
         public async Task<IActionResult> Search(string? query)
         {
-            query ??= "";
-            var acceptedPapers = new List<Tuple<ResearchPaper, string, bool>>();
-            
+            var acceptedPapers = new List<Tuple<ResearchPaper, string>>();
+
             //Separating words of our search
             List<string> words = query.Split(" ").ToList();
 
@@ -169,21 +168,15 @@ namespace ResearchHub.Controllers
                     }
                 }
 
-                var id = UserController.GetNormalUser((await _userManager.GetUserAsync(HttpContext.User)).Id, _context.User.ToList()).id;
-
-                foreach (var word in words)
+                foreach(var word in words)
                 {                 
                     if ((paper.title != null && paper.title.ToLower().Contains(word.ToLower()) || (paper.paperAbstract != null && paper.paperAbstract.ToLower().Contains(word.ToLower())) || paperTopics.ToLower().Contains(word.ToLower()) || paperTypes.ToLower().Contains(word.ToLower())))
                     {
                         var myID = publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().FirstOrDefault().userID;
                         var aspNetID = users.Where(usr => usr.id == myID).ToList().FirstOrDefault().aspNetID;
                         string name = allUsr.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault().UserName;
-                        bool displayEdit = false;
 
-                        if (id == publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().First().userID)
-                            displayEdit = true;
-
-                        acceptedPapers.Add(new Tuple<ResearchPaper, string, bool>(paper, name, displayEdit));
+                        acceptedPapers.Add(new Tuple<ResearchPaper, string>(paper, name));
                         break;
                     }                        
                 }
@@ -207,14 +200,7 @@ namespace ResearchHub.Controllers
 
         public async Task<IActionResult> SearchDetailed(string? title, string? types, string? topics, string? authors, string? keywords)
         {
-            /*
-            title ??= "";
-            types ??= "";
-            topics ??= "";
-            authors ??= "";
-            keywords ??= "";
-            */
-            var acceptedPapers = new List<Tuple<ResearchPaper, string, bool>>();
+            var acceptedPapers = new List<Tuple<ResearchPaper, string>>();
             var allPapers = _context.ResearchPaper.ToList();
 
             //paper needs to have at least one word in its description 
@@ -256,8 +242,6 @@ namespace ResearchHub.Controllers
                     }
                 }
 
-                var id = UserController.GetNormalUser((await _userManager.GetUserAsync(HttpContext.User)).Id, _context.User.ToList()).id;
-
                 List<string> authorsUsernames = new List<string>();
                 
 
@@ -275,12 +259,8 @@ namespace ResearchHub.Controllers
                     var myID = publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().FirstOrDefault().userID;
                     var aspNetID = users.Where(usr => usr.id == myID).ToList().FirstOrDefault().aspNetID;
                     string name = allUsr.Where(usr => usr.Id == aspNetID).ToList().FirstOrDefault().UserName;
-                    bool displayEdit = false;
-
-                    if (id == publishedPapers.Where(pp => pp.paperID == paper.ID).ToList().First().userID)
-                        displayEdit = true;
                     
-                    acceptedPapers.Add(new Tuple<ResearchPaper, string, bool>(paper, name, displayEdit));                    
+                    acceptedPapers.Add(new Tuple<ResearchPaper, string>(paper, name));                    
                 }
             }
 
