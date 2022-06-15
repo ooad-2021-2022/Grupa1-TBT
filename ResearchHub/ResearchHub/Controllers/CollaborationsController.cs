@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +16,7 @@ namespace ResearchHub.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        
 
         public CollaborationsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
@@ -22,11 +24,26 @@ namespace ResearchHub.Controllers
             _userManager = userManager;
         }
 
+        public class DummyInput {
+            public DummyInput()
+            {
+
+            }
+
+            [EmailAddress]
+            [Display(Name ="Enter username of desired colleague:")]
+            public string username { get; set; }
+        }
+
+        [BindProperty]
+        public DummyInput Username { get; set; }
+
         // GET: Collaborations
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Collaborations.Include(c => c.collaboratee).Include(c => c.collaborator);
-            return View(await applicationDbContext.ToListAsync());
+            Username = new DummyInput();
+            Username.username = "";
+            return View(Username);
         }
 
         // GET: Collaborations/Details/5
@@ -46,7 +63,7 @@ namespace ResearchHub.Controllers
                 return NotFound();
             }
 
-            return View(collaborations);
+            return View(new Tuple <Collaborations, string>(collaborations, Username.username));
         }
 
         // GET: Collaborations/Create
@@ -54,7 +71,9 @@ namespace ResearchHub.Controllers
         {
             ViewData["collaborateeID"] = new SelectList(_context.User, "id", "id");
             ViewData["collaboratorID"] = new SelectList(_context.User, "id", "id");
-            return View();
+            ViewData["Title"] = "ma ja ba";
+            Username.username = "";
+            return View(Username);
         }
 
         // POST: Collaborations/Create
@@ -62,17 +81,39 @@ namespace ResearchHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,collaboratorID,collaborateeID,timeRequestMade")] Collaborations collaborations)
+        public async Task<IActionResult> Create([Bind("id,collaboratorID,collaborateeID,timeRequestMade")] Collaborations collaborations, string myUsername)
         {
-            if (ModelState.IsValid)
+            //find collaboratee id - the one who we want to collaborate with
+            var selectedUsers = _userManager.Users.ToList().Where(usr => usr.UserName == myUsername).ToList();
+            var collaborateeID = 0;
+
+            if (selectedUsers.Count == 0)
             {
-                _context.Add(collaborations);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ErrorViewModel model = new ErrorViewModel();
+                model.RequestId = "Searched colleague username does not exist";
+                return View("Error", model);
+            } else
+            {
+                collaborateeID = UserController.GetNormalUser(selectedUsers.First().Id, _context.User.ToList()).id;
             }
-            ViewData["collaborateeID"] = new SelectList(_context.User, "id", "id", collaborations.collaborateeID);
-            ViewData["collaboratorID"] = new SelectList(_context.User, "id", "id", collaborations.collaboratorID);
-            return View(collaborations);
+
+            //get current user normal ID
+            var currentAspUser = await _userManager.GetUserAsync(HttpContext.User);
+            var collaboratorID = UserController.GetNormalUser(currentAspUser.Id, _context.User.ToList()).id;
+
+            Collaborations colab = new Collaborations();
+
+            colab.collaboratorID = collaboratorID;
+            colab.collaborateeID = collaborateeID;
+            colab.timeRequestMade = DateTime.Now;
+
+            _context.Add(colab);
+            await _context.SaveChangesAsync();
+            
+            return View("Index", new DummyInput()
+            {
+                username = "Collaboration request made successfully!"
+            });
         }
 
         // GET: Collaborations/Edit/5
