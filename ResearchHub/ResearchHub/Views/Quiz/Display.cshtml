@@ -3,7 +3,14 @@
 @{
     ViewData["Title"] = "Display";
 }
-
+<style>
+    body{
+        background-color: #d2f6f6;
+    }
+    div{
+        background-color: #edfbfb;
+    }
+</style>
 <h1>Display</h1>
 <form asp-action="CheckAnswers" enctype="multipart/form-data" style="justify-content: center">
     <input type="number" step="0.1" name=rating value="@Model.Item3" hidden/>    

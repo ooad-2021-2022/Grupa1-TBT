@@ -2,7 +2,14 @@
 @{
     ViewData["Title"] = "Display";
 }
-
+<style>
+    body{
+        background-color: #d2f6f6;
+    }
+    table{
+        background-color: #edfbfb;
+    }
+</style>
 <h1>Returned research papers are:</h1>
 
 @if(Model.Count > 0) {

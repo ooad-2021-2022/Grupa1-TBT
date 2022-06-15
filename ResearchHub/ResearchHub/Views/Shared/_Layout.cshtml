@@ -7,9 +7,19 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
+<style>
+    body{
+        background-color: #d2f6f6;
+        color:darkblue;
+        justify-content: center
+    }
+    footer{
+        background-color:white;
+    }
+</style>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header style="background-color:white">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-white border-bottom box-shadow mb-3" style="color:darkblue;background-color:white">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="ResearchPaper" asp-action="Index">ResearchHub</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -19,20 +29,20 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Index">Home</a>
+                            <a class="nav-link" style = "color: darkblue"  asp-area="" asp-controller="ResearchPaper" asp-action="Index">Home</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             @if (User.IsInRole("Registered user") || User.IsInRole("VIP User"))
                             {
                                 <l class="nav-item">
-                                    <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
+                                    <a  class="nav-link " style = "color: darkblue" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
                                 </l>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ResearchPaper" asp-action="Create">New paper</a>
+                                    <a class="nav-link" style = "color: darkblue" asp-area="" asp-controller="ResearchPaper" asp-action="Create">New paper</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Collaborations" asp-action="Index">Collaborate</a>
+                                    <a class="nav-link " style = "color: darkblue" asp-area="" asp-controller="Collaborations" asp-action="Index">Collaborate</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="DailyReport">Daily report</a>
@@ -44,7 +54,7 @@
                             @if (User.IsInRole("VIP User"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Go to coffee</a>
+                                    <a class="nav-link" style = "color: darkblue" asp-area="" asp-controller="User" asp-action="Index">Go to coffee</a>
                                 </li>
                             }
                             @if (User.IsInRole("Administrator"))
@@ -70,7 +80,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container" style="justify-content:center">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
