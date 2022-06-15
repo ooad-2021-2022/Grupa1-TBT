@@ -9897,18 +9897,15 @@ a.text-danger:hover, a.text-danger:focus {
 }
 
 .text-light {
-  color: #00008b !important;
+  color: #f8f9fa !important;
 }
 
 a.text-light:hover, a.text-light:focus {
   color: #cbd3da !important;
 }
 
-.text-darkblue {
-    color: #00008b !important
-}
 .text-dark {
-  color: #00008b !important;
+  color: #343a40 !important;
 }
 
 a.text-dark:hover, a.text-dark:focus {
