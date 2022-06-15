@@ -3,9 +3,33 @@
 @{
     ViewData["Title"] = "Index";
 }
+<style>
+    body{
+        background-image: url("https://702rc195vu6fsa4x3pnb6d8m-wpengine.netdna-ssl.com/wp-content/uploads/2020/06/Biotech-shares-16.9.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-color: #d2f6f6;
+        background-blend-mode: soft-light;   
+        justify-content: center;
+    }
+    div{
+        justify-content:center
+    }
+    h1{
+        font-size: 60px;
+    }
+    h2{
+        font-size: 30px;
+    }
+</style>
+<center>
+    <div style="align-items:center"><h1>Research paper</h1><h2>Seek knowledge, forget about points!</h2></div>
+</center>
 
-<div style="justify-content: center"><h1>Research paper - Seek knowledge, forget about points!</h1></div>
 <br />
+<center>
+    <p><a asp-action="Create">Create New</a></p>
+</center>
 
  <form class="row" style="justify-content:center" asp-action="Search" enctype="form-data">
     <div class="form-group col-10" style="justify-content:center">
@@ -15,9 +39,10 @@
                 <input type="submit" value="Search" class="btn btn-primary" />
     </div>
 </form> <br />
-<h3>If you want detailed search, make sure to fill the form below. 
+<center>
+<h3 style="font-size: 30px">If you want detailed search, make sure to fill the form below. 
     Use " " - blank sign to separate your search words in one input:
-</h3> <br /> <br />
+</h3></center> <br /> <br />
 <div class="row" style="justify-content: center">
     <div class="col-md-4">
         <form asp-action="SearchDetailed" enctype="form-data">
@@ -42,9 +67,12 @@
                 <label class="control-label">Keywords that can be found in one's abstract paper</label>
                 <input name="keywords" class="form-control"/>
             </div>
-            <div class="form-group">
+            <center>
+                <div class="form-group">
                 <input type="submit" value="Search" class="btn btn-primary" />
-            </div>
+                </div>
+            </center>
+            
         </form>
     </div>
 </div>

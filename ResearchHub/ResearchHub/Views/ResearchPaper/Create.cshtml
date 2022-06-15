@@ -6,12 +6,17 @@
 @{
     ViewData["Title"] = "Create";
 }
-
-<h1>Create</h1>
-
-<h4>ResearchPaper - potrebno još dodati kviz i korisnike koji su bili kolaboratori na paperu.</h4>
-<hr />
-<div class="row" style="justify-content: center">
+<style>
+    body{
+        background-color: #d2f6f6;
+    }
+</style>
+<div class="row" style="justify-content: center; background-color: #edfbfb;" >
+    <div>
+        <h1>Create</h1>
+        <h4>ResearchPaper - potrebno još dodati kviz i korisnike koji su bili kolaboratori na paperu.</h4>
+        <hr />
+    </div>
     <div class="col-md-8">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

@@ -3,18 +3,24 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-
-<h3 class="alert-success">@Model.username</h3>
-<h3>Enter desired workmate for collaboration:</h3>
+<style>
+    body{
+        background-color: #d2f6f6;
+    }
+    
+</style>
+<div>
+<h3 class="alert-success" style="margin:10px; margin-bottom:10px; margin-top:10px">@Model.username</h3>
+<h3 style="margin:10px; margin-bottom:10px; margin-top:10px">Enter desired workmate for collaboration:</h3>
 <form asp-action="Create" method="post" enctype="multipart/form-data">
      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group" style="margin:10px; margin-bottom:10px; margin-top:10px">
                 <label asp-for="username" class="control-label"></label>
                 <input name="myUsername" type="email" class ="form-control" />
                 <span asp-validation-for="username" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin:10px; margin-bottom:10px; margin-top:10px">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
 </form>
+</div>
